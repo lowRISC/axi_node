@@ -39,7 +39,8 @@ module axi_xbar_rework #(
     input  logic [NB_MASTER-1:0][AXI_ADDR_WIDTH-1:0] end_addr_i
 );
     localparam AXI_ID_OUT = AXI_ID_WIDTH + $clog2(NB_SLAVE);
-    logic [NB_MASTER-1:0][AXI_ADDR_WIDTH-1:0] mask_addr_i;
+    logic [NB_MASTER-1:0][AXI_ADDR_WIDTH-1:0] start_addr;
+    logic [NB_MASTER-1:0][AXI_ADDR_WIDTH-1:0] mask_addr;
    
     axi_channel #(
             .ID_WIDTH   (AXI_ID_WIDTH),
@@ -66,7 +67,7 @@ module axi_xbar_rework #(
                     .USER_WIDTH(AXI_USER_WIDTH),
                     .ID_WIDTH(AXI_ID_WIDTH),
                     .DATA_WIDTH(AXI_DATA_WIDTH)
-                    ) to_if_adapter
+                    ) from_if_adapter
          (
           .incoming_if(slave[i]),
           .outgoing_openip(slave_buf[i])                       
@@ -80,12 +81,13 @@ module axi_xbar_rework #(
                     .USER_WIDTH(AXI_USER_WIDTH),
                     .ID_WIDTH(AXI_ID_OUT),
                     .DATA_WIDTH(AXI_DATA_WIDTH)
-                    ) from_if_adapter
+                    ) to_if_adapter
          (
           .outgoing_if(master[i]),
           .incoming_openip(master_buf[i])                       
           );
-      assign mask_addr_i[i] = end_addr_i[i] - start_addr_i[i];
+      assign mask_addr[NB_MASTER-1-i] = end_addr_i[i] - start_addr_i[i];
+      assign start_addr[NB_MASTER-1-i] = start_addr_i[i];
       end
 
 axi_crossbar #(
@@ -98,8 +100,8 @@ axi_crossbar #(
 ) openip_xbar (
     .master(slave_buf),
     .slave(master_buf),
-    .BASE(start_addr_i),
-    .MASK(mask_addr_i)               
+    .BASE(start_addr),
+    .MASK(mask_addr)               
 );
    
 endmodule
