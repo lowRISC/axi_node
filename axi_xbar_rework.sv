@@ -71,7 +71,6 @@ module axi_xbar_rework #(
           .incoming_if(slave[i]),
           .outgoing_openip(slave_buf[i])                       
           );
-      assign mask_addr_i[i] = end_addr_i[i] - start_addr_i[i];
       end
 
     for (genvar i = 0; i < NB_MASTER; i=i+1)
@@ -86,6 +85,7 @@ module axi_xbar_rework #(
           .outgoing_if(master[i]),
           .incoming_openip(master_buf[i])                       
           );
+      assign mask_addr_i[i] = end_addr_i[i] - start_addr_i[i];
       end
 
 axi_crossbar #(
