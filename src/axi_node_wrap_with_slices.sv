@@ -54,19 +54,21 @@ module axi_node_wrap_with_slices #(
        .AXI_USER_WIDTH ( AXI_USER_WIDTH )
     ) axi_master [NB_MASTER-1:0]();
 
-    axi_xbar_rework #(
-        .NB_MASTER      ( NB_MASTER      ),
-        .NB_SLAVE       ( NB_SLAVE       ),
-        .AXI_ADDR_WIDTH ( AXI_ADDR_WIDTH ),
-        .AXI_DATA_WIDTH ( AXI_DATA_WIDTH ),
-        .AXI_ID_WIDTH   ( AXI_ID_WIDTH   ),
-        .AXI_USER_WIDTH ( AXI_USER_WIDTH )
-    ) i_axi_node_intf_wrap (
+    axi_xbar_rework i_axi_node_intf_wrap (
         .clk,
         .rst_n,
         .test_en_i,
-        .slave  ( axi_slave  ),
-        .master ( axi_master ),
+        .slave_0(axi_slave[0]),
+        .slave_1(axi_slave[1]),
+        .master_0(axi_master[0]),
+        .master_1(axi_master[1]),
+        .master_2(axi_master[2]),
+        .master_3(axi_master[3]),
+        .master_4(axi_master[4]),
+        .master_5(axi_master[5]),
+        .master_6(axi_master[6]),
+        .master_7(axi_master[7]),
+        .master_8(axi_master[8]),
         .start_addr_i,
         .end_addr_i
     );
