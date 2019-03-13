@@ -54,7 +54,7 @@ module axi_node_wrap_with_slices #(
        .AXI_USER_WIDTH ( AXI_USER_WIDTH )
     ) axi_master [NB_MASTER-1:0]();
 
-    axi_xbar_rework i_axi_node_intf_wrap (
+    axi_xbar_rework_wrapper i_axi_node_intf_wrap (
         .clk,
         .rst_n,
         .test_en_i,
