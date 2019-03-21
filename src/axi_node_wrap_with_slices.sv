@@ -33,8 +33,8 @@ module axi_node_wrap_with_slices #(
     input logic      clk,
     input logic      rst_n,
     input logic      test_en_i,
-    AXI_BUS.Slave    slave  [NB_SLAVE-1:0],
-    AXI_BUS.Master   master [NB_MASTER-1:0],
+    AXI_BUS.in       slave  [NB_SLAVE-1:0],
+    AXI_BUS.out      master [NB_MASTER-1:0],
     // Memory map
     input  logic [NB_REGION-1:0][NB_MASTER-1:0][AXI_ADDR_WIDTH-1:0] start_addr_i,
     input  logic [NB_REGION-1:0][NB_MASTER-1:0][AXI_ADDR_WIDTH-1:0] end_addr_i,
@@ -56,23 +56,23 @@ module axi_node_wrap_with_slices #(
        .AXI_USER_WIDTH ( AXI_USER_WIDTH )
     ) axi_master [NB_MASTER-1:0]();
 
-    axi_node_intf_wrap #(
-        .NB_MASTER      ( NB_MASTER      ),
-        .NB_SLAVE       ( NB_SLAVE       ),
-        .NB_REGION      ( NB_REGION      ),
-        .AXI_ADDR_WIDTH ( AXI_ADDR_WIDTH ),
-        .AXI_DATA_WIDTH ( AXI_DATA_WIDTH ),
-        .AXI_ID_WIDTH   ( AXI_ID_WIDTH   ),
-        .AXI_USER_WIDTH ( AXI_USER_WIDTH )
-    ) i_axi_node_intf_wrap (
-        .clk            ( clk           ),
-        .rst_n          ( rst_n         ),
-        .test_en_i      ( test_en_i     ),
-        .slave          ( axi_slave     ),
-        .master         ( axi_master    ),
-        .start_addr_i   ( start_addr_i  ),
-        .end_addr_i     ( end_addr_i    ),
-        .valid_rule_i   ( valid_rule_i  )
+    axi_xbar_rework_wrapper i_axi_node_intf_wrap (
+        .clk,
+        .rst_n,
+        .test_en_i,
+        .slave_0(axi_slave[0]),
+        .slave_1(axi_slave[1]),
+        .master_0(axi_master[0]),
+        .master_1(axi_master[1]),
+        .master_2(axi_master[2]),
+        .master_3(axi_master[3]),
+        .master_4(axi_master[4]),
+        .master_5(axi_master[5]),
+        .master_6(axi_master[6]),
+        .master_7(axi_master[7]),
+        .master_8(axi_master[8]),
+        .start_addr_i,
+        .end_addr_i
     );
 
     for (genvar i = 0; i < NB_MASTER; i++) begin : axi_slice_master_port
